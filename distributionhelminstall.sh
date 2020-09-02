@@ -14,7 +14,7 @@ fi
 
 helm repo add jfrog https://charts.jfrog.io/
 helm repo update
-helm upgrade distribution jfrog/distribution \
+helm upgrade --install distribution jfrog/distribution \
      --set distribution.jfrogUrl=http://artifactory-ha-nginx \
      --set distribution.masterKey=$MASTER_KEY \
      --set distribution.joinKey=$JOIN_KEY

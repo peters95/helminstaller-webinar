@@ -14,7 +14,7 @@ fi
 
 helm repo add jfrog https://charts.jfrog.io/
 helm repo update
-helm upgrade pipelines jfrog/pipelines \
+helm upgrade --install pipelines jfrog/pipelines \
      --set pipelines.jfrogUrl=http://artifactory-ha-nginx \
      --set pipelines.jfrogUrlUI=http://artifactory-ha-nginx \
      --set pipelines.masterKey=$MASTER_KEY \

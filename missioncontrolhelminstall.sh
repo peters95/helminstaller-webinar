@@ -14,7 +14,7 @@ fi
 
 helm repo add jfrog https://charts.jfrog.io/
 helm repo update
-helm upgrade mission-control jfrog/mission-control \
+helm upgrade --install mission-control jfrog/mission-control \
     --set missionControl.jfrogUrl=http://artifactory-ha-nginx \
     --set missionControl.masterKey=$MASTER_KEY \
     --set missionControl.joinKey=$JOIN_KEY

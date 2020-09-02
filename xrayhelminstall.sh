@@ -14,7 +14,7 @@ fi
 
 helm repo add jfrog https://charts.jfrog.io/
 helm repo update
-helm upgrade xray jfrog/xray \
+helm upgrade --install xray jfrog/xray \
      --set xray.jfrogUrl=http://artifactory-ha-nginx \
      --set xray.masterKey=$MASTER_KEY \
      --set xray.joinKey=$JOIN_KEY
