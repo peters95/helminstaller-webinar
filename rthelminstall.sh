@@ -31,10 +31,15 @@ then
   JOIN_KEY=EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 fi
 
+if [ -z "$SSL_OFFLOAD" ]
+then
+  SSL_OFFLOAD=false
+fi
+
 helm repo add jfrog https://charts.jfrog.io/
 helm repo update
 helm upgrade --install artifactory-ha jfrog/artifactory-ha \
-      --set nginx.service.ssloffload=true \
+      --set nginx.service.ssloffload=$SSL_OFFLOAD \
       --set nginx.tlsSecretName=tls-ingress \
       --set artifactory.node.replicaCount=2 \
       --set artifactory.masterKey=$MASTER_KEY \

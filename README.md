@@ -6,7 +6,7 @@ Installer scripts to deploy all the JFrog unified platform into k8s via official
 
 ## Why do I care?
 
-Installing all our products via helm can be time consuming and at times frustrating.
+Installing all our products via helm can be time consuming and at times frustrating for new users.
 
 These scripts will show you the bare min options you need to get a working JFrog unified platform up on k8s.
 
@@ -82,3 +82,25 @@ echo ${JOIN_KEY}
 ````
 
 Once these are set you can then run the helm installer which will pick up on the new keys.
+
+## TLS Setup
+
+By default the helm chart will not enabled TLS.
+
+To enable TLS you will need your TLS crt and key file.
+
+Export two new environment variables as shown below for each file:
+
+````bash
+export ARTIFACTORY_TLS_CERT=/path/to/tls.crt
+````
+
+````bash
+export ARTIFACTORY_TLS_KEY=/path/to/tls.key
+````
+
+Optionally if you want to offload SSL to a third party provider like Cloudflare use:
+
+````bash
+export SSL_OFFLOAD=true
+````
