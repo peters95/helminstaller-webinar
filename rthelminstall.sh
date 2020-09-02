@@ -8,6 +8,7 @@ then
   exit 1
 else
   kubectl create secret generic artifactory-license --from-file=$ARTIFACTORY_LICENSE_FILE
+  ARTIFACTORY_DATA_KEY=$(echo $ARTIFACTORY_LICENSE_FILE | sed 's:.*/::')
 fi
 
 if [ -z "$ARTIFACTORY_TLS_CERT" ]
@@ -39,4 +40,4 @@ helm upgrade artifactory-ha jfrog/artifactory-ha \
       --set artifactory.masterKey=$MASTER_KEY \
       --set artifactory.joinKey=$JOIN_KEY \
       --set artifactory.license.secret=artifactory-license \
-      --set artifactory.license.dataKey=artifactory.cluster.license
+      --set artifactory.license.dataKey=$ARTIFACTORY_DATA_KEY
