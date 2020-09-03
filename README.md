@@ -33,7 +33,7 @@ export ARTIFACTORY_LICENSE_FILE=$HOME/artifactory.cluster.license
 ### Install Artifactory
 
 ````bash
-./rthelminstall.sh
+./artifactoryhelminstall.sh
 ````
 
 ### Install Xray
