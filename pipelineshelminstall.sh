@@ -27,4 +27,7 @@ helm upgrade --install pipelines jfrog/pipelines \
      --set postgresql.postgresqlUsername=apiuser \
      --set postgresql.postgresqlPassword=password \
      --set rabbitmq.rabbitmq.username=user \
-     --set rabbitmq.rabbitmq.password=bitnami
+     --set rabbitmq.rabbitmq.password=bitnami \
+     --set rabbitmq.externalUrl=amqps://pipelines-rabbit.jfrog.tech \
+     --set pipelines.api.externalUrl=http://pipelines-api.jfrog.tech \
+     --set pipelines.www.externalUrl=http://pipelines-www.jfrog.tech
