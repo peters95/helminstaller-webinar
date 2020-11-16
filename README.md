@@ -114,3 +114,12 @@ export JFROG_NAMESPACE=artifactory
 ````
 
 If this environment variable is set the namespace will be created and used for all deployments.
+
+## Pipelines DNS Requirement
+
+Pipelines requires that the API, WWW, and Rabbitmq be exposed externally via DNS to be available to the build plane as this may run remotely in another cloud provider.
+
+The installation script will display a mapping of DNS to IP address that must be saved to your DNS provider for pipelines to work as expected.
+
+Alternatively, you can enable ingress and provide the corresponding host and tls secret if your Kubernetes does not support NetworkLoadBalancers or you do not wish to use them.
+
