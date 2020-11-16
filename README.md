@@ -104,3 +104,13 @@ Optionally if you want to offload SSL to a third party provider like Cloudflare 
 ````bash
 export SSL_OFFLOAD=true
 ````
+
+## Namespace Usage
+
+To use a different namespace for the installation export the environment variable below with the namespace you would like to deploy into.
+
+````bash
+export JFROG_NAMESPACE=artifactory
+````
+
+If this environment variable is set the namespace will be created and used for all deployments.
