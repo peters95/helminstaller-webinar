@@ -12,13 +12,13 @@ These scripts will show you the bare min options you need to get a working JFrog
 
 ## License Requirements
 
-These helm installer scripts support on BYOL (bring your own license) JFrog platform installations.
+These helm installer scripts support BYOL (bring your own license) JFrog platform installations.
 
 If you don't have a license and want to evaluate our products, sign up for JFrog trial licenses [here.](https://jfrog.com/platform/free-trial/)
 
 One Enterprise + license is required per node in our Artifactory HA cluster.
 
-Once you receive your license keys via email save the base64 encoded strings into a text file `$HOME/artifactory.cluster.license` delimited by double new lines as shown below:
+Once you receive your license keys via email save the base64 encoded strings into a text file `$HOME/artifactory.cluster.license` delimited by two new lines as shown below:
 
 ````bash
 ABCDEF23905jidjfda907589h34n5ljndljf8495u
