@@ -1,6 +1,20 @@
 #!/usr/bin/env bash
 
-echo "Installing Pipelines"
+echo "Checking Pipelines installation parameters..."
+
+# Get command line args if passed
+while getopts n:a:r:p:w:m:j: flag
+do
+    case "${flag}" in
+        n) JFROG_NAMESPACE=${OPTARG};;
+        a) ARTIFACTORY_URL=${OPTARG};;
+        r) PIPELINE_RABBITMQ_URL=${OPTARG};;
+        p) PIPELINE_API_URL=${OPTARG};;
+        w) PIPELINE_WWW_URL=${OPTARG};;
+        m) MASTER_KEY=${OPTARG};;
+        j) JOIN_KEY=${OPTARG};;
+    esac
+done
 
 if [ -z "$ARTIFACTORY_URL" ]
 then
@@ -53,6 +67,15 @@ else
   NAMESPACE_COMMAND="-n $JFROG_NAMESPACE"
 fi
 
+echo "Installing JFrog Pipelines with following options:"
+echo "Namespace: $JFROG_NAMESPACE"
+echo "Artifactory DNS Url: $ARTIFACTORY_URL"
+echo "Rabbitmq DNS Url: $PIPELINE_RABBITMQ_URL"
+echo "Pipeline API DNS Url: $PIPELINE_API_URL"
+echo "Pipeline WWW DNS Url: $PIPELINE_WWW_URL"
+echo "Master key: $MASTER_KEY"
+echo "Join key: $JOIN_KEY"
+
 helm repo add jfrog https://charts.jfrog.io/
 helm repo update
 helm upgrade --install pipelines jfrog/pipelines \
@@ -75,18 +98,15 @@ helm upgrade --install pipelines jfrog/pipelines \
      --set pipelines.www.externalUrl=$PIPELINE_WWW_URL::30001 \
      --set pipelines.www.service.type=LoadBalancer $NAMESPACE_COMMAND
 
-echo "Waiting 1 minute for external IP addresses to expose via Network Load Balancer..."
-sleep 60
+kubectl rollout status statefulset/pipelines-pipelines-services $NAMESPACE_COMMAND
+
+API_IP_ADDR=$(kubectl get svc pipelines-pipelines-api $NAMESPACE_COMMAND -o jsonpath="{.status.loadBalancer.ingress[*]['ip', 'hostname']}")
+WWW_IP_ADDR=$(kubectl get svc pipelines-pipelines-www $NAMESPACE_COMMAND -o jsonpath="{.status.loadBalancer.ingress[*]['ip', 'hostname']}")
+RABBIT_IP_ADDR=$(kubectl get svc pipelines-rabbitmq $NAMESPACE_COMMAND -o jsonpath="{.status.loadBalancer.ingress[*]['ip', 'hostname']}")
 echo "Please map the following external IP address to DNS urls."
-API_IP_ADDR=$(kubectl get svc $NAMESPACE_COMMAND | grep "pipelines-pipelines-api")
-WWW_IP_ADDR=$(kubectl get svc $NAMESPACE_COMMAND | grep "pipelines-pipelines-www")
-RABBIT_IP_ADDR=$(kubectl get svc $NAMESPACE_COMMAND | grep "pipelines-rabbitmq")
 echo "******************************************"
 echo "Map $PIPELINE_API_URL to $API_IP_ADDR"
 echo "Map $PIPELINE_WWW_URL to $WWW_IP_ADDR"
 echo "Map $PIPELINE_RABBITMQ_URL to $RABBIT_IP_ADDR"
 echo "******************************************"
-echo "If any IP address is missing above wait a few moments and run:"
-echo "kubectl get svc $NAMESPACE_COMMAND"
-echo ""
-echo "SUCCESS!"
+echo "Successfully installed JFrog Pipelines!"

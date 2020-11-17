@@ -2,6 +2,16 @@
 
 echo "Installing Xray"
 
+# Get command line args if passed
+while getopts n:m:j: flag
+do
+    case "${flag}" in
+        n) JFROG_NAMESPACE=${OPTARG};;
+        m) MASTER_KEY=${OPTARG};;
+        j) JOIN_KEY=${OPTARG};;
+    esac
+done
+
 if [ -z "$MASTER_KEY" ]
 then
   MASTER_KEY=FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF

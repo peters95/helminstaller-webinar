@@ -1,4 +1,4 @@
-# JFrog Helm Installer Webinar
+# JFrog Helm Installer Quickstart
 
 ## What is this?
 
@@ -12,114 +12,63 @@ These scripts will show you the bare min options you need to get a working JFrog
 
 ## License Requirements
 
-Ent/E+ licenses are required to use all of the JFrog Platform products.
+These helm installer scripts support on BYOL (bring your own license) JFrog platform installations.
 
-3 or more Ent/E+ licenses are required to setup an Artifactory HA cluster.
+If you don't have a license and want to evaluate our products, sign up for JFrog trial licenses [here.](https://jfrog.com/platform/free-trial/)
 
-Save your licenses into a new file 'artifactory.cluster.license'
+One Enterprise + license is required per node in our Artifactory HA cluster.
 
-````bash
-vi $HOME/artifactory.cluster.license
-````
-
-Then export a new environment variable ARTIFACTORY_LICENSE_FILE that points to this file.
+Once you receive your license keys via email save the base64 encoded strings into a text file `$HOME/artifactory.cluster.license` delimited by double new lines as shown below:
 
 ````bash
-export ARTIFACTORY_LICENSE_FILE=$HOME/artifactory.cluster.license
+ABCDEF23905jidjfda907589h34n5ljndljf8495u
+djfoijfd89u3458923jdlsjfidsuy85u8j34jkdjf
+jodju89jdfj
+
+DIOJidfjle490uj0dfojldjllj50290jojfldjflj
+J)(DJV)DJlj3l4j9jsm0fj90d8su045ju3p4jldjf
+oopdkfokdkf
+
+FAKEDONOTTRYTOUSETHESEASREALLICENSEUSETHE
+TRIALLINKABOVEIFYOUNEEDLICENSEKEYSFROMJFR
+OGTOEVALUATE
 ````
 
 ## How to use?
 
+### Installation Flags
+
+````text
+  n : Kubernetes namespace to use
+  l : Local file with licenses to apply as kubernetes secret
+````
+
 ### Install Artifactory
 
 ````bash
-./artifactoryhelminstall.sh
+./artifactoryhelminstall.sh -n artifactory -l $HOME/artifactory.cluster.license 
 ````
 
 ### Install Xray
 ````bash
-./xrayhelminstall.sh
+./xrayhelminstall.sh -n artifactory
 ````
 
 ### Install Distribution
 ````bash
-./distributionhelminstall.sh
+./distributionhelminstall.sh -n artifactory
 ````
 
 ### Mission Control
 ````bash
-./missioncontrolhelminstall.sh
+./missioncontrolhelminstall.sh -n artifactory
 ````
 
-### Pipelines
-````bash
-./pipelineshelminstall.sh
-````
 
 ## What does it do?
 
-It will deploy Artifactory, Xray, Distribution, Mission Control, and Pipelines into your k8s cluster.
+It will deploy Artifactory, Xray, Distribution, and Mission Control into your k8s cluster.
 
-You will need to add DNS to the external IP address exposed by the artifactory-ha-nginx service for SSL to be enabled.
+## Advance Setup
 
-
-## Master and Join Key
-
-By default the helm installer scripts will use a basic masterKey and joinKey if none are supplied.
-
-It is HIGHLY recommended you change these values. You can update these to a new value using openssl.
-
-````bash
-# Create a new master key
-export MASTER_KEY=$(openssl rand -hex 32)
-echo ${MASTER_KEY}
-````
-
-````bash
-# Create a new join key
-export JOIN_KEY=$(openssl rand -hex 32)
-echo ${JOIN_KEY}
-````
-
-Once these are set you can then run the helm installer which will pick up on the new keys.
-
-## TLS Setup
-
-By default the helm chart will not enabled TLS.
-
-To enable TLS you will need your TLS crt and key file.
-
-Export two new environment variables as shown below for each file:
-
-````bash
-export ARTIFACTORY_TLS_CERT=/path/to/tls.crt
-````
-
-````bash
-export ARTIFACTORY_TLS_KEY=/path/to/tls.key
-````
-
-Optionally if you want to offload SSL to a third party provider like Cloudflare use:
-
-````bash
-export SSL_OFFLOAD=true
-````
-
-## Namespace Usage
-
-To use a different namespace for the installation export the environment variable below with the namespace you would like to deploy into.
-
-````bash
-export JFROG_NAMESPACE=artifactory
-````
-
-If this environment variable is set the namespace will be created and used for all deployments.
-
-## Pipelines DNS Requirement
-
-Pipelines requires that the API, WWW, and Rabbitmq be exposed externally via DNS to be available to the build plane as this may run remotely in another cloud provider.
-
-The installation script will display a mapping of DNS to IP address that must be saved to your DNS provider for pipelines to work as expected.
-
-Alternatively, you can enable ingress and provide the corresponding host and tls secret if your Kubernetes does not support NetworkLoadBalancers or you do not wish to use them.
-
+The advance setup guide to secure Artifactory with TLS or deploy to JFrog Pipelines can be found [here.](ADVANCE_SETUP.md)
